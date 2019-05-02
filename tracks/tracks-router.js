@@ -1,32 +1,34 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-router.get('/', async (req, res) => {
+const Tracks = require("./tracks-model.js");
+
+router.get("/", async (req, res) => {
   try {
     const tracks = await Tracks.find();
     res.status(200).json(tracks);
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'We ran into an error retrieving the tracks' });
+      .json({ message: "We ran into an error retrieving the tracks" });
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const track = await Tracks.findById(req.params.id);
     if (track) {
       res.status(200).json(track);
     } else {
-      res.status(404).json({ message: 'We could not find the track' });
+      res.status(404).json({ message: "We could not find the track" });
     }
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'We ran into an error retrieving the track' });
+      .json({ message: "We ran into an error retrieving the track" });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const track = req.body;
 
   if (track.name) {
@@ -36,14 +38,14 @@ router.post('/', async (req, res) => {
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'We ran into an error creating the track' });
+        .json({ message: "We ran into an error creating the track" });
     }
   } else {
-    res.status(400).json({ message: 'Please provide name of the track' });
+    res.status(400).json({ message: "Please provide name of the track" });
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   const changes = req.body;
 
   if (changes.name) {
@@ -53,35 +55,35 @@ router.put('/:id', async (req, res) => {
         res.status(200).json(updated);
       } else {
         res.status(404).json({
-          message: 'That track does not exist',
+          message: "That track does not exist"
         });
       }
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'We ran into an error updating the track' });
+        .json({ message: "We ran into an error updating the track" });
     }
   } else {
     res.status(400).json({
-      message: 'Please provide the name of the track',
+      message: "Please provide the name of the track"
     });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const count = await Tracks.remove(req.params.id);
     if (count > 0) {
       res.status(204).end();
     } else {
       res.status(404).json({
-        message: 'That track does not exist, perhaps it was deleted already',
+        message: "That track does not exist, perhaps it was deleted already"
       });
     }
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'We ran into an error removing the track' });
+      .json({ message: "We ran into an error removing the track" });
   }
 });
 
